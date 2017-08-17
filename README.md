@@ -1,0 +1,97 @@
+# Graph
+about graph
+
+MainActivity.java file to create graph view and set values
+
+    DemoView demoview;
+    public double percentage;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        demoview = new DemoView(this);
+        setContentView(R.layout.activity_main);
+    }
+    private class DemoView extends View {
+        public DemoView(Context context){
+            super(context);
+        }
+        @Override protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            int width = getWidth();
+            int height = getHeight();
+            Paint paint = new Paint();
+            Paint paint1 = new Paint();
+            paint1.setColor(Color.BLACK);
+            paint1.setStyle(Paint.Style.FILL);
+            paint.setShader(new LinearGradient(0, height / 2, width, height / 2, Color.GREEN, Color.RED, Shader.TileMode.MIRROR));
+            paint.setAntiAlias(true);
+
+            PointF p1 = new PointF(0, height);
+            float x = (float) (percentage * width);
+            PointF p2 = new PointF(x, height);
+
+            float y = (width * height - height * x) / (float) width;
+            PointF p3 = new PointF(x, y);
+            Path path = new Path();
+            path.moveTo(p1.x, p1.y);
+            path.lineTo(p2.x, p2.y);
+            path.lineTo(p3.x, p3.y);
+            path.close();
+
+            PointF a = new PointF(0,height);
+            PointF b = new PointF(width,height);
+            PointF c = new PointF(width,0);
+            Path path1 = new Path();
+            path1.moveTo(a.x, a.y);
+            path1.lineTo(b.x, b.y);
+            path1.lineTo(c.x, c.y);
+            canvas.drawPath(path1, paint1);
+            canvas.drawPath(path,paint);
+        }
+    }
+    public void setPercentage(double percentage) {
+        this.percentage=percentage;
+    }
+    public void change(View view)
+    {
+        double p;
+        EditText editText=(EditText)findViewById(R.id.get_val);
+        p=Double.parseDouble(editText.getText().toString());
+        setPercentage(p);
+        setContentView(demoview);
+    }
+    @Override
+    public void onBackPressed() {
+        setContentView(R.layout.activity_main);
+    }
+    
+    
+And Xml file to get input
+
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.app.manish.MainActivity">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:gravity="center"
+        android:id="@+id/get_val"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="click"
+        android:onClick="change"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
